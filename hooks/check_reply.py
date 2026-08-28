@@ -17,8 +17,42 @@ from pathlib import Path
 
 CHECKER = Path.home() / ".claude" / "skills" / "clearmode" / "scripts" / "clearcheck.py"
 PROFILE = "general"
-MIN_WORDS = 40          # one-liners are fine as they are
-MAX_BLOCKED_ERRORS = 6  # a huge dump means something else is wrong, let it through
+MIN_WORDS = 40    # one-liners are fine as they are
+MAX_SHOWN = 8     # never hand back a wall of findings
+MAX_BLOCKING = 14 # more than this means a bad parse, let the reply through
+
+# Which rules are worth interrupting a turn for. Severity in the rule pack is
+# tuned for documents; a chat reply is a different contract, so the policy lives
+# here rather than in the shared standard.
+#
+# Every rule below is deterministic: an exact match, a count, or a threshold.
+# Judgement-call rules (D1 delete test, D4 horoscope, P6 jargon gloss, H11
+# sources, S5 one topic) stay advisory, because they fire on good writing too.
+BLOCK_ON = {
+    # Human: the AI tells
+    "H1",   # slop vocabulary: delve, robust, seamless, leverage
+    "H2",   # slop phrases: "in today's fast-paced"
+    "H3",   # canned openers: Furthermore, Moreover, Additionally
+    "H4",   # em-dashes
+    "H6",   # negative parallelism: "not just X but Y"
+    "H8",   # "serves as" instead of "is"
+    "H12",  # assistant voice: "hope this helps", "great question"
+    "H14",  # model self-reference
+    "H15",  # announcing that you are stopping
+    "H16",  # hedge stacking
+    # Plain: readable first time
+    "P1",   # sentence over the length cap
+    "P5",   # long word where a short one exists
+    "P7",   # acronym never expanded
+    # Structured: shape matches the content
+    "S1",   # three parallel items that should be a list
+    "S4",   # paragraph over the sentence cap
+    "S7",   # Title Case headings
+    "S9",   # emoji used as bullets or headings
+    # Dense: says something
+    "D3",   # opener with no number, name, or claim
+    "D5",   # filler: very, really, basically, just, actually
+}
 
 
 def last_assistant_text(transcript: Path) -> str:
@@ -83,8 +117,8 @@ def main() -> int:
 
     if isinstance(report, list):
         report = report[0] if report else {}
-    errors = [f for f in report.get("findings", []) if f.get("severity") == "error"]
-    if not errors or len(errors) > MAX_BLOCKED_ERRORS:
+    hits = [f for f in report.get("findings", []) if f.get("rule") in BLOCK_ON]
+    if not hits or len(hits) > MAX_BLOCKING:
         return 0
 
     lines = [
@@ -92,11 +126,13 @@ def main() -> int:
         "Do not mention this check, do not show a score, and do not apologise. Just say it better.",
         "",
     ]
-    for f in errors:
+    for f in hits[:MAX_SHOWN]:
         note = f.get("note") or f.get("fix", "")
         lines.append(f"- {f['rule']} {f['title']}: {note}")
         if f.get("match"):
             lines.append(f"    in: {f['match'][:90]}")
+    if len(hits) > MAX_SHOWN:
+        lines.append(f"- and {len(hits) - MAX_SHOWN} more of the same kind")
 
     print(json.dumps({"decision": "block", "reason": "\n".join(lines)}))
     return 0

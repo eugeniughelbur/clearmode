@@ -130,7 +130,9 @@ Everything above governs files. This governs what Claude says to you.
 ./install.sh --hook
 ```
 
-It scores each finished reply and makes Claude rewrite anything that breaks a rule, before the turn ends. You never see a score. You just stop reading jargon.
+It scores each finished reply and makes Claude rewrite it before the turn ends. You never see a score. You just stop reading jargon.
+
+19 of the 43 rules interrupt a reply. The rest stay advisory, because a chat turn is a different contract from a document, and a judgement-call rule that fires on good writing is worse than no rule. The list is `BLOCK_ON` at the top of `hooks/check_reply.py`, one line per rule, edit it to taste.
 
 It edits `~/.claude/settings.json` and backs it up first. Restart Claude Code after. To switch it off:
 
