@@ -17,8 +17,8 @@ The checker is deterministic, offline, and stdlib-only. Python 3.10, no pip, no 
 
 ## Scoring bands
 
-- 90 to 100, band A: ship it
-- 80 to 89, band B: one pass short
+- 90 to 100, band A: ready to publish
+- 80 to 89, band B: fix the errors, then publish
 - 70 to 79, band C: reads assisted
 - Below 70, band F: this reads like a model wrote it
 

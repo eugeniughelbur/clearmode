@@ -49,7 +49,7 @@
 </p>
 
 <p align="center">
-  <img src="media/clearcheck.gif" alt="Same point written twice. The model-written draft scores 41 out of 100 with three lines struck through, and reads like a model wrote it. The rewritten draft scores 98 and ships." width="100%" />
+  <img src="media/clearcheck.gif" alt="Same point written twice. The model-written draft scores 41 out of 100 with three lines struck through, and reads like a model wrote it. The rewritten draft scores 98 and is ready to publish." width="100%" />
   <br />
   <em>Real fixture scores from this repo. The report names the rule and the line for every one of those strikes.</em>
   <br /><br />
@@ -92,7 +92,7 @@ tests/fixtures/bad.md   CLEAR 41.4/100  band F  this reads like a model wrote it
   Plain 41.5  Human 0  Struc 90.0  Dense 43.0
   24 error, 23 warn, 6 review
 
-tests/fixtures/good.md  CLEAR 98.0/100  band A  ship it
+tests/fixtures/good.md  CLEAR 98.0/100  band A  ready to publish
   Plain 97.0  Human 100.0  Struc 100.0  Dense 92.5
   0 error, 1 warn, 1 review
 ```

@@ -121,8 +121,8 @@ Every finding costs its rule weight, multiplied by severity (error 2.0x, warn 1.
 
 | Score | Band | Verdict |
 |---|---|---|
-| 90+ | A | ship it |
-| 80+ | B | ship after the errors |
+| 90+ | A | ready to publish |
+| 80+ | B | fix the errors, then publish |
 | 65+ | C | one rewrite pass needed |
 | 45+ | D | rewrite, do not patch |
 | 0+ | F | this reads like a model wrote it |

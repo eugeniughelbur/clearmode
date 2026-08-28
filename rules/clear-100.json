@@ -1293,12 +1293,12 @@
       {
         "min": 90,
         "label": "A",
-        "verdict": "ship it"
+        "verdict": "ready to publish"
       },
       {
         "min": 80,
         "label": "B",
-        "verdict": "ship after the errors"
+        "verdict": "fix the errors, then publish"
       },
       {
         "min": 65,
