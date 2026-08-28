@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 CHECKER = Path.home() / ".claude" / "skills" / "clearmode" / "scripts" / "clearcheck.py"
@@ -20,6 +21,8 @@ PROFILE = "general"
 MIN_WORDS = 40    # one-liners are fine as they are
 MAX_SHOWN = 8     # never hand back a wall of findings
 MAX_BLOCKING = 14 # more than this means a bad parse, let the reply through
+SETTLE_TRIES = 6  # the reply is still being flushed to the transcript when Stop fires
+SETTLE_WAIT = 0.35
 
 # Which rules are worth interrupting a turn for. Severity in the rule pack is
 # tuned for documents; a chat reply is a different contract, so the policy lives
@@ -53,6 +56,23 @@ BLOCK_ON = {
     "D3",   # opener with no number, name, or claim
     "D5",   # filler: very, really, basically, just, actually
 }
+
+
+def settled_assistant_text(transcript: Path) -> str:
+    """The reply that just finished, once the transcript has caught up.
+
+    Stop fires before the final message is flushed, so a single read returns the
+    PREVIOUS turn and Claude gets told to fix text it is no longer writing. Poll
+    until the tail stops changing.
+    """
+    text = last_assistant_text(transcript)
+    for _ in range(SETTLE_TRIES):
+        time.sleep(SETTLE_WAIT)
+        fresh = last_assistant_text(transcript)
+        if fresh == text:
+            return text
+        text = fresh
+    return text
 
 
 def last_assistant_text(transcript: Path) -> str:
@@ -96,7 +116,7 @@ def main() -> int:
     if not transcript.is_file():
         return 0
 
-    prose = prose_only(last_assistant_text(transcript))
+    prose = prose_only(settled_assistant_text(transcript))
     if len(prose.split()) < MIN_WORDS:
         return 0
 
