@@ -1,0 +1,38 @@
+title: clearmode
+description: >-
+  CLEAR-100, an anti-AI-slop writing standard and plain-language checker for
+  AI-drafted text. Scores any document 0 to 100 against 43 rules on four axes:
+  plain words, human voice, real structure, and information density. One JSON
+  rule pack compiles to 18 agent targets, so a Claude Code skill, an AGENTS.md
+  block, a Cursor rule, a Grok instruction, a system prompt, and a Vale style
+  package all enforce identical rules. Stdlib-only Python, zero dependencies,
+  no network calls.
+theme: jekyll-theme-cayman
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+url: https://eugeniughelbur.github.io
+baseurl: /clearmode
+twitter:
+  username: eugeniu_ghelbur
+  card: summary_large_image
+social:
+  name: Eugeniu Ghelbur
+  links:
+    - https://github.com/eugeniughelbur
+    - https://www.linkedin.com/in/eugeniu-ghelbur/
+    - https://x.com/eugeniu_ghelbur
+
+exclude:
+  - .venv
+  - __pycache__
+  - .env*
+  - install.sh
+  - .gitignore
+  - CITATION.cff
+  - scripts
+  - tests
+  - commands
+  - targets
+  - rules

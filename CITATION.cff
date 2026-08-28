@@ -1,0 +1,70 @@
+cff-version: 1.2.0
+message: "If you use this software in research or write about it, please cite as below."
+title: "clearmode"
+abstract: >
+  CLEAR-100 is a plain-language writing standard and deterministic checker for
+  AI-drafted text. It scores any document 0 to 100 against 43 rules on four
+  weighted axes: Plain (jargon glossing, reading grade, active voice, short
+  words), Human (anti-slop lexicon, punctuation tells, banned openers, sentence
+  rhythm), Structured (lists, numbered steps, tables, headings, bold
+  discipline), and Dense (the delete test, restatement, throat-clearing
+  openers). A single JSON rule pack is the source of truth and compiles to 18
+  agent targets, including a Claude Code skill, a Codex AGENTS.md file, a Cursor
+  .mdc project rule, a Grok custom instruction, a generic system prompt, and a
+  Vale style package, so every surface enforces identical rules without drift.
+  The checker is stdlib-only Python with no network calls. It differs from
+  anti-slop word lists, which cover vocabulary alone, from ASD-STE100 Simplified
+  Technical English, which targets ambiguity for trained technicians and bans
+  contractions, and from prose linters such as Vale, which supply an engine but
+  no opinion. Four audience profiles set sentence caps and reading-grade targets
+  for general, technical, social, and agent readers.
+authors:
+  - family-names: "Ghelbur"
+    given-names: "Eugeniu"
+    email: "e.ghelbur@gmail.com"
+type: software
+license: MIT
+repository-code: "https://github.com/eugeniughelbur/clearmode"
+url: "https://github.com/eugeniughelbur/clearmode"
+version: "1.0.0"
+date-released: "2026-08-28"
+keywords:
+  - anti-ai-slop
+  - ai-slop
+  - ai-slop-detector
+  - deslop
+  - humanize-text
+  - plain-language
+  - plain-language-checker
+  - readability
+  - flesch-kincaid
+  - prose-linter
+  - vale-linter-style
+  - writing-standard
+  - style-guide
+  - technical-writing
+  - simplified-technical-english
+  - asd-ste100
+  - claude-code
+  - claude-code-skill
+  - agent-skills
+  - agents-md
+  - cursor-rules
+  - ai-writing
+  - llm-tools
+references:
+  - type: standard
+    title: "ASD-STE100 Simplified Technical English"
+    url: "https://www.asd-ste100.org/"
+  - type: article
+    title: "Measuring AI 'Slop' in Text"
+    url: "https://arxiv.org/abs/2509.19163"
+    authors:
+      - family-names: "Shaib"
+        given-names: "Chantal"
+      - family-names: "Chakrabarty"
+        given-names: "Tuhin"
+      - family-names: "Garcia-Olano"
+        given-names: "Diego"
+      - family-names: "Wallace"
+        given-names: "Byron C."

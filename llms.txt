@@ -1,0 +1,46 @@
+# clearmode
+
+> CLEAR-100 is a plain-language writing standard for AI-drafted text. It scores any document 0 to 100 against 43 rules on four axes, then names the exact line that loses the reader. One JSON rule pack compiles to 18 agent targets, so Claude Code, Codex, Cursor, Grok, Vale and a raw system prompt all enforce the same rules.
+
+clearmode exists because every other tool in this space covers one axis. Anti-slop repos ban vocabulary. Vale ships an engine with no opinion. ASD-STE100 fixes ambiguity for trained technicians and bans contractions.
+
+None of them asks three questions. Can a reader outside the field follow this? Does the page have a shape? Does this sentence say anything the reader could not guess?
+
+The checker is deterministic, offline, and stdlib-only. Python 3.10, no pip, no npm, no API key, no telemetry.
+
+## The four axes
+
+- Plain (30%): can someone outside the field read it once and get it? Jargon glossing, reading grade, active voice, short words.
+- Human (30%): does it read like a person who did the work? Slop lexicon, punctuation tells, banned openers, sentence rhythm.
+- Structured (25%): does the shape of the page match the shape of the information? Lists, numbered steps, tables, headings, bold discipline.
+- Dense (15%): does every sentence carry something a reader could not guess? The delete test, restatement, throat-clearing openers.
+
+## Scoring bands
+
+- 90 to 100, band A: ship it
+- 80 to 89, band B: one pass short
+- 70 to 79, band C: reads assisted
+- Below 70, band F: this reads like a model wrote it
+
+## Key files
+
+- [rules/clear-100.json](rules/clear-100.json): the single source of truth. Every rule, threshold, lexicon and profile.
+- [scripts/clearcheck.py](scripts/clearcheck.py): the scorer. `python3 scripts/clearcheck.py FILE --profile general`.
+- [scripts/compile_targets.py](scripts/compile_targets.py): regenerates all 18 targets. `--check` fails on drift.
+- [CLEAR-100.md](CLEAR-100.md): the standard in prose, all 43 rules.
+- [targets/](targets/): prebuilt files per agent. Never hand-edit, they are generated.
+- [README.md](README.md): install, quickstart, comparison table, FAQ.
+
+## Profiles
+
+Four reader models over one standard: general (grade 9, 25-word cap), technical (grade 11, 28), social (grade 8, 20), agent (grade 9, 20).
+
+## What it is not
+
+- Not an AI detector. It measures readability, not authorship.
+- Not a fact checker. Wrong and clear is still wrong.
+- Not an ASD-STE100 compliance claim. That dictionary is ASD copyright and is not reproduced here.
+
+## License
+
+MIT.

@@ -1,0 +1,129 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "clearmode",
+  "alternateName": [
+    "CLEAR-100",
+    "anti-AI-slop writing standard",
+    "AI slop detector",
+    "plain language checker",
+    "AI writing checker",
+    "deslop skill",
+    "Claude Code writing skill",
+    "Vale ClearMode style",
+    "AGENTS.md writing rules"
+  ],
+  "applicationCategory": "DeveloperApplication",
+  "applicationSubCategory": "Prose linter and writing standard",
+  "operatingSystem": "macOS, Linux, Windows",
+  "softwareVersion": "1.0.0",
+  "programmingLanguage": "Python",
+  "softwareRequirements": "Python 3.10 or later. No third-party packages.",
+  "isAccessibleForFree": true,
+  "license": "https://opensource.org/licenses/MIT",
+  "codeRepository": "https://github.com/eugeniughelbur/clearmode",
+  "url": "https://github.com/eugeniughelbur/clearmode",
+  "description": "CLEAR-100 is a plain-language writing standard and deterministic checker for AI-drafted text. It scores any document 0 to 100 against 43 rules on four axes: plain words, human voice, real structure, and information density. One JSON rule pack compiles to 18 agent targets, so a Claude Code skill, an AGENTS.md block, a Cursor rule, a Grok instruction, a system prompt, and a Vale style package all enforce identical rules.",
+  "featureList": [
+    "Scores text 0 to 100 with four axis sub-scores",
+    "43 rules covering jargon, slop vocabulary, structure, and information density",
+    "Names the exact line and rule for every finding",
+    "Four audience profiles: general, technical, social, agent",
+    "Compiles one JSON rule pack to 18 agent targets with no drift",
+    "Stdlib-only Python, zero dependencies, no network calls",
+    "CI gate with a configurable minimum score",
+    "Vale style package for existing prose-linting pipelines"
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Eugeniu Ghelbur",
+    "url": "https://github.com/eugeniughelbur"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is AI slop?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AI slop is low-quality AI-generated text. The 2026 arXiv paper that first defined the term (Shaib et al., Measuring AI 'Slop' in Text) built its taxonomy from expert interviews and found that slop judgments correlate with latent dimensions such as coherence and relevance, not with a banned-word list alone. That is why clearmode scores information density and page structure alongside vocabulary."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I check if my text sounds AI-generated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run python3 scripts/clearcheck.py yourfile.md. clearmode returns a CLEAR score from 0 to 100 plus four axis sub-scores, and names the exact line and rule for every finding. Anything under 70 reads like a model wrote it. The checker is deterministic and runs offline with no API key."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is clearmode an AI detector?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. clearmode measures readability, not authorship. A human can write a document that scores 41 and a model can write one that scores 95. It tells you whether a reader can follow the text, never who or what produced it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does clearmode work with ChatGPT, Cursor, Codex, or Grok?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The targets directory holds a prebuilt file for each surface: a Claude Code SKILL.md, a Codex AGENTS.md, a Cursor .mdc project rule, a Grok custom-instructions text file, a generic system prompt, and a Vale style package. Copy one file, or run ./install.sh and it detects what you have. All 18 targets compile from one JSON rule pack, so they never drift apart."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is clearmode different from an anti-slop word list?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Anti-slop repos ban vocabulary and stop there, which fixes roughly a third of the problem. clearmode also asks whether a non-specialist can follow the sentence, whether the page structure matches the information, and whether each sentence says something the reader could not already guess. It glosses 79 jargon terms, scores information density, and enforces a reading grade per audience."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why not just use ASD-STE100 Simplified Technical English?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ASD-STE100 solved ambiguity for aerospace maintenance manuals in 1986 and still works for that job. It bans contractions and reads robotic on purpose, has no concept of AI slop, and assumes a trained technician as the reader. clearmode keeps STE's discipline on sentence length, active voice, and noun clusters, then adds the three axes STE never needed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What reading grade should AI-drafted text target?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Grade 9 or lower for a general audience, grade 11 for technical documentation, grade 8 for social posts. clearmode ships four profiles that set the reading-grade target, the sentence-length cap, and the sentences-per-paragraph cap for each of those readers, plus an agent profile for text another model will consume."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I turn a clearmode rule off?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Edit rules/clear-100.json, which is the single source of truth for every rule, threshold, and word list, then run python3 scripts/compile_targets.py to regenerate all 18 targets. Never hand-edit a file under targets/, because the next compile overwrites it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does clearmode run offline?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. clearmode needs Python 3.10 and the standard library. There is no pip install, no npm install, no API key, no network call, and no telemetry. The checker is deterministic, so the same text always produces the same score."
+      }
+    }
+  ]
+}
+</script>

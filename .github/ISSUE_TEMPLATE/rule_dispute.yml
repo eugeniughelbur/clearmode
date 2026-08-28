@@ -1,0 +1,40 @@
+name: Dispute a rule
+description: A rule flags something that should pass, or misses something that should fail.
+title: "[rule] "
+labels: ["rule-dispute"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Rules are arguments. This is the most useful report this repo can get.
+  - type: input
+    id: rule
+    attributes:
+      label: Rule ID
+      description: The ID from the report, for example P5 or H1 or D1.
+      placeholder: H1
+    validations:
+      required: true
+  - type: textarea
+    id: sentence
+    attributes:
+      label: The sentence
+      description: Paste the exact text the checker flagged or missed.
+    validations:
+      required: true
+  - type: dropdown
+    id: direction
+    attributes:
+      label: Which way is it wrong?
+      options:
+        - False positive, this should pass
+        - False negative, this should fail
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: One or two sentences. What does the rule get wrong about this case?
+    validations:
+      required: true

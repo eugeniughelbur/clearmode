@@ -1,0 +1,47 @@
+name: clear
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: targets match the rule pack
+        run: python3 scripts/compile_targets.py --check
+
+      - name: tests
+        run: python3 -m unittest discover tests -v
+
+      - name: repo prose passes its own standard
+        run: |
+          python3 scripts/clearcheck.py \
+            README.md CLEAR-100.md AGENTS.md CONTRIBUTING.md \
+            SECURITY.md CODE_OF_CONDUCT.md llms.txt \
+            --profile technical --gate 85
+
+      - name: structured data is valid JSON-LD
+        run: |
+          python3 - <<'PY'
+          import json, re, pathlib, sys
+          bad = 0
+          for f in ["_includes/head_custom.html", "docs/index.html"]:
+              s = pathlib.Path(f).read_text()
+              blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', s, re.S)
+              if not blocks:
+                  print(f"{f}: no JSON-LD found"); bad = 1; continue
+              for i, b in enumerate(blocks):
+                  try:
+                      json.loads(b)
+                  except json.JSONDecodeError as e:
+                      print(f"{f} block {i}: {e}"); bad = 1
+              print(f"{f}: {len(blocks)} valid blocks")
+          sys.exit(bad)
+          PY

@@ -1,0 +1,20 @@
+---
+description: CLEAR-100 writing standard. Plain, human, structured, dense.
+globs: ["**/*.md", "**/*.mdx", "**/*.txt", "**/*.html"]
+alwaysApply: true
+---
+
+Write so anyone can read it. CLEAR-100 v1.0.0, four axes: Plain, Human, Structured, Dense.
+
+Never ship: em-dashes, slop words (delve, robust, seamless, leverage, unlock, game-changer),
+slop phrases (in today's fast-paced, it's worth noting), negative parallelism (not just X but Y),
+assistant voice (hope this helps, great question), model self-reference, or a first sentence
+with no number, name, or claim in it.
+
+Always: active voice, one instruction per sentence, sentences under 25 words,
+paragraphs under 4 sentences, reading grade at or under 9.
+Gloss any term of art once in plain words. Keep contractions. Three parallel items become a list.
+Sequences become numbered steps. Delete any sentence a reader could have guessed.
+
+Check with: python3 scripts/clearcheck.py FILE --profile general
+Full rules: references/rules.md
