@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1600, height=900"/>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  @font-face { font-family:"Brand"; src:url("assets/font/bradley.ttf"); font-display:block; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1600px; height:900px; overflow:hidden; background:#EDE3D2; }
+  .paper { position:absolute; inset:0; background:#EDE3D2;
+    background-image:repeating-linear-gradient(0deg, transparent 0, transparent 44px, rgba(26,40,64,0.06) 45px, rgba(26,40,64,0.06) 46px); }
+  .svg { position:absolute; inset:0; width:1600px; height:900px; z-index:1; }
+  .arw { stroke-dasharray:1; stroke-dashoffset:1; }
+  .lab { position:absolute; font-family:"Brand",cursive; font-weight:700; color:#1A2840;
+    opacity:0; text-align:center; white-space:nowrap; transform:translateX(-50%); }
+</style></head>
+<body>
+  <div id="root" data-composition-id="main" data-start="0" data-duration="7" data-width="1600" data-height="900">
+    <div class="paper"></div>
+
+    <svg class="svg" viewBox="0 0 1600 900">
+      <!-- LEFT card -->
+      <rect id="cardL" x="110" y="200" width="560" height="360" rx="14" fill="#FBF6EC" stroke="#1A2840" stroke-width="7" opacity="0"/>
+      <g id="linesL" opacity="0" stroke="#1A2840" stroke-width="7" stroke-linecap="round" fill="none">
+        <path d="M160 258 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+        <path d="M160 318 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+        <path d="M160 378 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+        <path d="M160 438 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+        <path d="M160 498 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+      </g>
+      <path id="strike1" class="arw" d="M156 316 L580 314" stroke="#C8612D" stroke-width="9" pathLength="1" fill="none" stroke-linecap="round"/>
+      <path id="strike2" class="arw" d="M156 436 L528 438" stroke="#C8612D" stroke-width="9" pathLength="1" fill="none" stroke-linecap="round"/>
+      <path id="strike3" class="arw" d="M156 496 L560 494" stroke="#C8612D" stroke-width="9" pathLength="1" fill="none" stroke-linecap="round"/>
+      <g id="badgeL" opacity="0" style="transform-origin:648px 536px">
+        <circle cx="648" cy="536" r="86" fill="#C8612D" stroke="#1A2840" stroke-width="8"/>
+        <text x="648" y="536" text-anchor="middle" dominant-baseline="central" font-family="Brand,cursive" font-weight="700" font-size="92" fill="#FBF6EC">41</text>
+      </g>
+
+      <!-- arrow -->
+      <path id="arrow" class="arw" d="M760 380 L840 380 M824 366 L840 380 L824 394" stroke="#1A2840" stroke-width="9" pathLength="1" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- RIGHT card -->
+      <rect id="cardR" x="930" y="200" width="560" height="360" rx="14" fill="#FBF6EC" stroke="#1A2840" stroke-width="7" opacity="0"/>
+      <g id="linesR" opacity="0" stroke="#1A2840" stroke-width="7" stroke-linecap="round" fill="none">
+        <path d="M980 258 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+        <path d="M980 318 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+        <path d="M980 378 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0"/>
+        <path d="M980 438 q26 -11 52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+      </g>
+      <g id="badgeR" opacity="0" style="transform-origin:1468px 536px">
+        <circle cx="1468" cy="536" r="86" fill="#4E9A94" stroke="#1A2840" stroke-width="8"/>
+        <text x="1468" y="536" text-anchor="middle" dominant-baseline="central" font-family="Brand,cursive" font-weight="700" font-size="92" fill="#FBF6EC">98</text>
+      </g>
+    </svg>
+
+    <div id="title" class="lab" style="left:800px;top:74px;font-size:56px">SAME POINT. TWO DRAFTS.</div>
+
+
+    <div id="capL" class="lab" style="left:390px;top:690px;font-size:42px">reads like a model wrote it</div>
+    <div id="capR" class="lab" style="left:1210px;top:690px;font-size:42px">ship it</div>
+
+    <div id="foot" class="lab" style="left:800px;top:800px;font-size:38px;color:#C8612D">clearmode scores it, and names the line</div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo("#title",{opacity:0,y:18},{opacity:1,y:0,duration:0.35,ease:'power2.out'},0.05);
+
+    tl.fromTo("#cardL",{opacity:0,scale:0.94,transformOrigin:'390px 380px'},{opacity:1,scale:1,duration:0.4,ease:'back.out(1.4)'},0.15);
+    tl.fromTo("#linesL",{opacity:0},{opacity:1,duration:0.3},0.35);
+    tl.fromTo("#strike1",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.26,ease:'power1.inOut'},0.6);
+    tl.fromTo("#strike2",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.26,ease:'power1.inOut'},0.74);
+    tl.fromTo("#strike3",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.26,ease:'power1.inOut'},0.88);
+    tl.fromTo("#badgeL",{opacity:0,scale:0.4,svgOrigin:"648 536"},{opacity:1,scale:1,duration:0.42,ease:'back.out(2)'},0.62);
+    tl.fromTo("#capL",{opacity:0,y:16},{opacity:1,y:0,duration:0.35,ease:'power2.out'},0.95);
+
+    tl.fromTo("#arrow",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.35,ease:'power1.inOut'},1.15);
+
+    tl.fromTo("#cardR",{opacity:0,scale:0.94,transformOrigin:'1210px 380px'},{opacity:1,scale:1,duration:0.4,ease:'back.out(1.4)'},1.35);
+    tl.fromTo("#linesR",{opacity:0},{opacity:1,duration:0.3},1.55);
+    tl.fromTo("#badgeR",{opacity:0,scale:0.4,svgOrigin:"1468 536"},{opacity:1,scale:1,duration:0.45,ease:'back.out(2)'},1.7);
+    tl.fromTo("#capR",{opacity:0,y:16},{opacity:1,y:0,duration:0.35,ease:'power2.out'},2.05);
+
+    tl.fromTo("#foot",{opacity:0,y:16},{opacity:1,y:0,duration:0.4,ease:'power2.out'},2.35);
+    tl.to({},{duration:4.2},2.8);
+
+    window.__timelines["main"] = tl;
+  </script>
+</body></html>

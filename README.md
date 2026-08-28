@@ -49,9 +49,9 @@
 </p>
 
 <p align="center">
-  <img src="media/clearcheck.gif" alt="clearcheck scoring two files: a model-written paragraph scores CLEAR 41.4 band F with 24 errors, and the same point rewritten by a person scores CLEAR 98.0 band A." width="100%" />
+  <img src="media/clearcheck.gif" alt="Same point written twice. The model-written draft scores 41 out of 100 with three lines struck through, and reads like a model wrote it. The rewritten draft scores 98 and ships." width="100%" />
   <br />
-  <em>Same point, two drafts. The checker names the rule and the line. Real output, no editing.</em>
+  <em>Real fixture scores from this repo. The report names the rule and the line for every one of those strikes.</em>
   <br /><br />
   <em>If this looks useful, <a href="https://github.com/eugeniughelbur/clearmode">star the repo</a>. It is how other people find it.</em>
 </p>
