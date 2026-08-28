@@ -24,37 +24,22 @@ MAX_BLOCKING = 14 # more than this means a bad parse, let the reply through
 SETTLE_TRIES = 6  # the reply is still being flushed to the transcript when Stop fires
 SETTLE_WAIT = 0.35
 
-# Which rules are worth interrupting a turn for. Severity in the rule pack is
-# tuned for documents; a chat reply is a different contract, so the policy lives
-# here rather than in the shared standard.
+# Which rules are worth interrupting a turn for.
 #
-# Every rule below is deterministic: an exact match, a count, or a threshold.
-# Judgement-call rules (D1 delete test, D4 horoscope, P6 jargon gloss, H11
-# sources, S5 one topic) stay advisory, because they fire on good writing too.
+# A Stop hook fires after the reply is already on the reader's screen, so a
+# block shows them the draft AND the rewrite. That double message costs more
+# attention than a loose sentence saves. So this list holds only the rules
+# where the first version is genuinely bad, never a style nitpick.
+#
+# Cut from 19 to 5 on 2026-08-29 after the doubles got annoying in practice.
+# Dropped: P1 P5 P7 H3 H8 H15 H16 S1 S4 S7 S9 D3 D5. Those still lower the
+# score on documents; they no longer interrupt a chat turn.
 BLOCK_ON = {
-    # Human: the AI tells
     "H1",   # slop vocabulary: delve, robust, seamless, leverage
     "H2",   # slop phrases: "in today's fast-paced"
-    "H3",   # canned openers: Furthermore, Moreover, Additionally
     "H4",   # em-dashes
-    "H6",   # negative parallelism: "not just X but Y"
-    "H8",   # "serves as" instead of "is"
     "H12",  # assistant voice: "hope this helps", "great question"
     "H14",  # model self-reference
-    "H15",  # announcing that you are stopping
-    "H16",  # hedge stacking
-    # Plain: readable first time
-    "P1",   # sentence over the length cap
-    "P5",   # long word where a short one exists
-    "P7",   # acronym never expanded
-    # Structured: shape matches the content
-    "S1",   # three parallel items that should be a list
-    "S4",   # paragraph over the sentence cap
-    "S7",   # Title Case headings
-    "S9",   # emoji used as bullets or headings
-    # Dense: says something
-    "D3",   # opener with no number, name, or claim
-    "D5",   # filler: very, really, basically, just, actually
 }
 
 
