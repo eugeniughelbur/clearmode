@@ -49,9 +49,9 @@
 </p>
 
 <p align="center">
-  <img src="media/clearcheck.gif" alt="A draft scoring 41 out of 100, with three real sentences underlined in rust and labelled slop phrase, say is, and who said it. Then the rewritten version scoring 98, where every line carries a number or a name." width="100%" />
+  <img src="media/clearcheck.gif" alt="A terminal session: a paragraph a model wrote, then clearcheck scoring it 41.4 out of 100 band F with 24 errors and each one naming its rule, file and line. Then the same points rewritten, scoring 98.0 band A, ready to publish." width="100%" />
   <br />
-  <em>Real lines from the two fixtures in this repo. Every underline is a rule the report names, with its line number.</em>
+  <em>Real session, real output. Every finding names the rule, the file and the line, and says what to write instead.</em>
   <br /><br />
   <em>If this looks useful, <a href="https://github.com/eugeniughelbur/clearmode">star the repo</a>. It is how other people find it.</em>
 </p>

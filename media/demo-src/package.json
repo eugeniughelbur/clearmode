@@ -1,9 +1,0 @@
-{
-  "name": "clearmode-demo",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "render": "npx --yes hyperframes@0.6.114 render",
-    "check": "npx --yes hyperframes@0.6.114 lint && npx --yes hyperframes@0.6.114 validate"
-  }
-}

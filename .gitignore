@@ -11,5 +11,3 @@ _site/
 # vhs intermediates
 media/*.mp4
 
-# licensed font, not redistributable - see media/demo-src/README.md
-media/demo-src/assets/font/
