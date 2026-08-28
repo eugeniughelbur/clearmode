@@ -13,4 +13,4 @@ npx --yes hyperframes@0.6.114 render --format gif --fps 15 --gif-loop 0 -o rende
 cp renders/clearcheck.gif ../clearcheck.gif
 ```
 
-The numbers on the badges are the real fixture scores: `tests/fixtures/bad.md` scores 41 and `tests/fixtures/good.md` scores 98. If the rule pack changes those, update the composition.
+Everything on screen is real. The sentences are lifted from `tests/fixtures/bad.md` and `tests/fixtures/good.md`, the underlines mark phrases the checker actually flags, and the badge numbers are the two files' real scores: 41 and 98. If the rule pack changes any of that, update the composition.

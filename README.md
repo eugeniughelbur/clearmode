@@ -49,9 +49,9 @@
 </p>
 
 <p align="center">
-  <img src="media/clearcheck.gif" alt="Same point written twice. The model-written draft scores 41 out of 100 with three lines struck through, and reads like a model wrote it. The rewritten draft scores 98 and is ready to publish." width="100%" />
+  <img src="media/clearcheck.gif" alt="A draft scoring 41 out of 100, with three real sentences underlined in rust and labelled slop phrase, say is, and who said it. Then the rewritten version scoring 98, where every line carries a number or a name." width="100%" />
   <br />
-  <em>Real fixture scores from this repo. The report names the rule and the line for every one of those strikes.</em>
+  <em>Real lines from the two fixtures in this repo. Every underline is a rule the report names, with its line number.</em>
   <br /><br />
   <em>If this looks useful, <a href="https://github.com/eugeniughelbur/clearmode">star the repo</a>. It is how other people find it.</em>
 </p>
