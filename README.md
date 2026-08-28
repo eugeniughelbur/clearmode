@@ -106,6 +106,7 @@ Fastest path: `./install.sh` detects what you have and writes only between marke
 ```bash
 ./install.sh --dry-run   # show what it would touch
 ./install.sh             # do it
+./install.sh --hook      # and govern Claude's replies to you, not just your files
 ```
 
 Or install one surface by hand.
@@ -120,6 +121,22 @@ cp -r SKILL.md references rules scripts ~/.claude/skills/clearmode/
 ```
 
 Four slash commands come with it: `/clear-check`, `/clear-rewrite`, `/clear-init`, `/clear-explain`.
+
+### The reply hook
+
+Everything above governs files. This governs what Claude says to you.
+
+```bash
+./install.sh --hook
+```
+
+It scores each finished reply and makes Claude rewrite anything that breaks a rule, before the turn ends. You never see a score. You just stop reading jargon.
+
+It edits `~/.claude/settings.json` and backs it up first. Restart Claude Code after. To switch it off:
+
+```bash
+python3 scripts/register_hook.py --remove
+```
 
 ### Codex CLI
 

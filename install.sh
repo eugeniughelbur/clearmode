@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # install.sh - put CLEAR-100 wherever this machine's agents read from.
+# Flags: --dry-run shows what it would touch, --hook also switches on the
+# Claude Code reply hook (edits ~/.claude/settings.json, backs it up first).
 # Idempotent: every write happens between markers, so running twice changes nothing.
 set -euo pipefail
 
@@ -7,11 +9,13 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BEGIN="<!-- CLEAR-100 begin -->"
 END="<!-- CLEAR-100 end -->"
 DRY=0
+HOOK=0
 TOUCHED=0
 
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY=1 ;;
+    --hook) HOOK=1 ;;
     -h|--help) sed -n '2,6p' "$0"; exit 0 ;;
     *) echo "unknown flag: $arg" >&2; exit 2 ;;
   esac
@@ -59,6 +63,26 @@ if [ -d "$HOME/.claude" ]; then
     for c in "$REPO"/commands/*.md; do
       do_write "$HOME/.claude/commands/$(basename "$c")" "$c"
     done
+  fi
+
+  # The reply hook. Makes the standard apply to what Claude SAYS, not only to
+  # files it writes: it scores each finished reply and makes Claude rewrite
+  # anything that breaks a rule. Registering it edits ~/.claude/settings.json,
+  # so it is opt-in.
+  if [ "$DRY" = 0 ]; then
+    mkdir -p "$HOME/.claude/hooks/clearmode"
+    cp "$REPO/hooks/check_reply.py" "$HOME/.claude/hooks/clearmode/check_reply.py"
+    chmod +x "$HOME/.claude/hooks/clearmode/check_reply.py"
+    TOUCHED=$((TOUCHED + 1))
+    say "wrote" "$HOME/.claude/hooks/clearmode/check_reply.py"
+    if [ "$HOOK" = 1 ]; then
+      python3 "$REPO/scripts/register_hook.py" | sed 's/^/  /'
+    else
+      echo "  note      run with --hook to switch it on, or:"
+      echo "            python3 $REPO/scripts/register_hook.py"
+    fi
+  else
+    say "would" "$HOME/.claude/hooks/clearmode/check_reply.py"
   fi
 fi
 
