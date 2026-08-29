@@ -23,6 +23,8 @@ MAX_SHOWN = 8     # never hand back a wall of findings
 MAX_BLOCKING = 14 # more than this means a bad parse, let the reply through
 SETTLE_TRIES = 6  # the reply is still being flushed to the transcript when Stop fires
 SETTLE_WAIT = 0.35
+LOG = Path.home() / ".claude" / "hooks" / "clearmode" / "log.txt"
+LOG_KEEP = 400  # lines
 
 # Which rules are worth interrupting a turn for.
 #
@@ -86,6 +88,18 @@ def prose_only(text: str) -> str:
     return text.strip()
 
 
+def log(verdict: str, detail: str = "") -> None:
+    """One line per check, so the user can watch what the hook actually did."""
+    try:
+        stamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        LOG.parent.mkdir(parents=True, exist_ok=True)
+        old = LOG.read_text().splitlines() if LOG.is_file() else []
+        old.append(f"{stamp}  {verdict:<6} {detail}".rstrip())
+        LOG.write_text("\n".join(old[-LOG_KEEP:]) + "\n")
+    except OSError:
+        pass
+
+
 def main() -> int:
     try:
         payload = json.load(sys.stdin)
@@ -102,7 +116,9 @@ def main() -> int:
         return 0
 
     prose = prose_only(settled_assistant_text(transcript))
-    if len(prose.split()) < MIN_WORDS:
+    words = len(prose.split())
+    if words < MIN_WORDS:
+        log("skip", f"{words}w, under the {MIN_WORDS}-word floor")
         return 0
 
     with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as fh:
@@ -122,9 +138,20 @@ def main() -> int:
 
     if isinstance(report, list):
         report = report[0] if report else {}
-    hits = [f for f in report.get("findings", []) if f.get("rule") in BLOCK_ON]
-    if not hits or len(hits) > MAX_BLOCKING:
+    score = report.get("score")
+    findings = report.get("findings", [])
+    hits = [f for f in findings if f.get("rule") in BLOCK_ON]
+    advisory = len(findings) - len(hits)
+
+    if not hits:
+        log("pass", f"{words}w, score {score}, {advisory} advisory")
         return 0
+    if len(hits) > MAX_BLOCKING:
+        log("pass", f"{words}w, {len(hits)} hits looks like a bad parse, let through")
+        return 0
+
+    log("BLOCK", f"{words}w, score {score}, " + ", ".join(
+        f"{f['rule']}({(f.get('match') or '')[:24]})" for f in hits))
 
     lines = [
         "Your reply broke the CLEAR-100 rules the user reads by. Rewrite the reply, then finish.",
