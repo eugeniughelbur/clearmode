@@ -130,7 +130,9 @@ Everything above tells the agent how to write. These two make sure it did.
 ./install.sh --hook
 ```
 
-`check_reply.py` scores every finished reply and makes Claude rewrite it before the turn ends.
+`check_reply.py` scores every finished reply. It ships in `MODE = "watch"`: it writes what it caught to the log and stays quiet.
+
+Set `MODE = "block"` and it sends the reply back to be rewritten. That works, but the first version is already on screen, so the reader gets the draft and then the fix. Two messages for one answer. Watch first, read the log for a week, and switch to block only if the rules alone are not holding.
 
 `check_outgoing.py` scores text on its way out: a Slack message, an email, a Linear comment, a markdown file. Those reach other people, so the tool call is blocked and retried until the text is clean. Nothing wrong ever leaves.
 
@@ -144,7 +146,7 @@ tail -f ~/.claude/hooks/clearmode/log.txt
 
 One line per reply: `pass`, `BLOCK` with the rules it caught, or `skip` for anything under 40 words.
 
-15 of the 43 rules interrupt a reply, and 10 interrupt outgoing text. The rest stay advisory, because a chat turn is a different contract from a document, and a judgement-call rule that fires on good writing is worse than no rule. A block shows the reader the draft and the rewrite, so every catch costs a double message. That is why the list is short. It is `BLOCK_ON` at the top of `hooks/check_reply.py`, one commented line per rule.
+15 of the 43 rules are watched in chat. 10 hard-block outgoing text, where a retry is invisible. The rest stay advisory, because a chat turn is a different contract from a document, and a judgement-call rule that fires on good writing is worse than no rule. A block shows the reader the draft and the rewrite, so every catch costs a double message. That is why the list is short. It is `BLOCK_ON` at the top of `hooks/check_reply.py`, one commented line per rule.
 
 It edits `~/.claude/settings.json` and backs it up first. Restart Claude Code after. To switch it off:
 

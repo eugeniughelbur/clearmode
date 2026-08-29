@@ -20,6 +20,11 @@ CHECKER = Path.home() / ".claude" / "skills" / "clearmode" / "scripts" / "clearc
 PROFILE = "general"
 MIN_WORDS = 40    # one-liners are fine as they are
 MAX_SHOWN = 8     # never hand back a wall of findings
+
+# "watch" logs what it caught and stays out of the way.
+# "block" sends the reply back to be rewritten, which shows the reader the draft
+# and then the fix. Two messages for one answer. That is why watch is default.
+MODE = "watch"
 SETTLE_TRIES = 6  # the reply is still being flushed to the transcript when Stop fires
 SETTLE_WAIT = 0.35
 LOG = Path.home() / ".claude" / "hooks" / "clearmode" / "log.txt"
@@ -166,8 +171,12 @@ def main() -> int:
     if not hits:
         log("pass", f"{words}w, score {score}, {advisory} advisory")
         return 0
-    log("BLOCK", f"{words}w, score {score}, " + ", ".join(
-        f"{f['rule']}({(f.get('match') or '')[:24]})" for f in hits))
+    caught = ", ".join(f"{f['rule']}({(f.get('match') or '')[:24]})" for f in hits)
+    if MODE != "block":
+        log("caught", f"{words}w, score {score}, {caught}")
+        return 0
+
+    log("BLOCK", f"{words}w, score {score}, {caught}")
 
     lines = [
         "Your reply broke the CLEAR-100 rules the user reads by. Rewrite the reply, then finish.",
