@@ -20,7 +20,6 @@ CHECKER = Path.home() / ".claude" / "skills" / "clearmode" / "scripts" / "clearc
 PROFILE = "general"
 MIN_WORDS = 40    # one-liners are fine as they are
 MAX_SHOWN = 8     # never hand back a wall of findings
-MAX_BLOCKING = 14 # more than this means a bad parse, let the reply through
 SETTLE_TRIES = 6  # the reply is still being flushed to the transcript when Stop fires
 SETTLE_WAIT = 0.35
 LOG = Path.home() / ".claude" / "hooks" / "clearmode" / "log.txt"
@@ -153,10 +152,6 @@ def main() -> int:
     if not hits:
         log("pass", f"{words}w, score {score}, {advisory} advisory")
         return 0
-    if len(hits) > MAX_BLOCKING:
-        log("pass", f"{words}w, {len(hits)} hits looks like a bad parse, let through")
-        return 0
-
     log("BLOCK", f"{words}w, score {score}, " + ", ".join(
         f"{f['rule']}({(f.get('match') or '')[:24]})" for f in hits))
 

@@ -23,7 +23,7 @@ CHECKER = Path.home() / ".claude" / "skills" / "clearmode" / "scripts" / "clearc
 LOG = Path.home() / ".claude" / "hooks" / "clearmode" / "log.txt"
 LOG_KEEP = 400
 MIN_WORDS = 25
-MAX_BLOCKING = 14
+MAX_SHOWN = 8
 
 # Same five as the reply hook, plus the ones worth a retry when the text is
 # going to another human and a rewrite costs nothing they will see.
@@ -127,7 +127,7 @@ def main() -> int:
     if isinstance(report, list):
         report = report[0] if report else {}
     hits = [f for f in report.get("findings", []) if f.get("rule") in BLOCK_ON]
-    if not hits or len(hits) > MAX_BLOCKING:
+    if not hits:
         log("pass", f"{label}, {words}w, score {report.get('score')}")
         return 0
 
@@ -139,10 +139,12 @@ def main() -> int:
         "Rewrite the text and call the tool again. Do not mention this check.",
         "",
     ]
-    for f in hits[:8]:
+    for f in hits[:MAX_SHOWN]:
         lines.append(f"- {f['rule']} {f['title']}: {f.get('note') or f.get('fix','')}")
         if f.get("match"):
             lines.append(f"    in: {f['match'][:90]}")
+    if len(hits) > MAX_SHOWN:
+        lines.append(f"- and {len(hits) - MAX_SHOWN} more")
 
     print(json.dumps({
         "hookSpecificOutput": {
