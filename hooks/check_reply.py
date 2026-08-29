@@ -36,11 +36,25 @@ LOG_KEEP = 400  # lines
 # Dropped: P1 P5 P7 H3 H8 H15 H16 S1 S4 S7 S9 D3 D5. Those still lower the
 # score on documents; they no longer interrupt a chat turn.
 BLOCK_ON = {
+    # The AI tells. Deterministic, exact matches.
     "H1",   # slop vocabulary: delve, robust, seamless, leverage
     "H2",   # slop phrases: "in today's fast-paced"
+    "H3",   # canned openers: Furthermore, Moreover, Additionally
     "H4",   # em-dashes
+    "H6",   # negative parallelism: "not just X but Y"
+    "H8",   # "serves as" instead of "is"
     "H12",  # assistant voice: "hope this helps", "great question"
     "H14",  # model self-reference
+    "H15",  # announcing that you are stopping
+    "H16",  # hedge stacking
+    # Readable first time.
+    "P1",   # sentence over the length cap
+    "P5",   # long word where a short one exists
+    # Shape matches the content.
+    "S4",   # paragraph over the sentence cap
+    # Says something.
+    "D3",   # opener with no number, name, or claim
+    "D5",   # filler: very, really, basically, just, actually
 }
 
 

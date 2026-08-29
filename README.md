@@ -144,7 +144,7 @@ tail -f ~/.claude/hooks/clearmode/log.txt
 
 One line per reply: `pass`, `BLOCK` with the rules it caught, or `skip` for anything under 40 words.
 
-5 of the 43 rules interrupt a reply. The rest stay advisory, because a chat turn is a different contract from a document, and a judgement-call rule that fires on good writing is worse than no rule. A block shows the reader the draft and the rewrite, so every catch costs a double message. That is why the list is short. It is `BLOCK_ON` at the top of `hooks/check_reply.py`, one commented line per rule.
+15 of the 43 rules interrupt a reply, and 10 interrupt outgoing text. The rest stay advisory, because a chat turn is a different contract from a document, and a judgement-call rule that fires on good writing is worse than no rule. A block shows the reader the draft and the rewrite, so every catch costs a double message. That is why the list is short. It is `BLOCK_ON` at the top of `hooks/check_reply.py`, one commented line per rule.
 
 It edits `~/.claude/settings.json` and backs it up first. Restart Claude Code after. To switch it off:
 
