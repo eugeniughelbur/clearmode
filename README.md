@@ -122,15 +122,19 @@ cp -r SKILL.md references rules scripts ~/.claude/skills/clearmode/
 
 Four slash commands come with it: `/clear-check`, `/clear-rewrite`, `/clear-init`, `/clear-explain`.
 
-### The reply hook
+### The enforcement hooks
 
-Everything above governs files. This governs what Claude says to you.
+Everything above tells the agent how to write. These two make sure it did.
 
 ```bash
 ./install.sh --hook
 ```
 
-It scores each finished reply and makes Claude rewrite it before the turn ends. You never see a score. You just stop reading jargon.
+`check_reply.py` scores every finished reply and makes Claude rewrite it before the turn ends.
+
+`check_outgoing.py` scores text on its way out: a Slack message, an email, a Linear comment, a markdown file. Those reach other people, so the tool call is blocked and retried until the text is clean. Nothing wrong ever leaves.
+
+You never see a score. You stop reading jargon.
 
 Watch what it does:
 

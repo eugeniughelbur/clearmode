@@ -65,16 +65,16 @@ if [ -d "$HOME/.claude" ]; then
     done
   fi
 
-  # The reply hook. Makes the standard apply to what Claude SAYS, not only to
-  # files it writes: it scores each finished reply and makes Claude rewrite
-  # anything that breaks a rule. Registering it edits ~/.claude/settings.json,
-  # so it is opt-in.
+  # The two enforcement hooks. check_reply.py scores what Claude says in chat.
+  # check_outgoing.py scores what it writes to a file or sends to a person:
+  # Slack, email, a Linear comment, a saved draft. Registering them edits
+  # ~/.claude/settings.json, so it is opt-in.
   if [ "$DRY" = 0 ]; then
     mkdir -p "$HOME/.claude/hooks/clearmode"
-    cp "$REPO/hooks/check_reply.py" "$HOME/.claude/hooks/clearmode/check_reply.py"
-    chmod +x "$HOME/.claude/hooks/clearmode/check_reply.py"
+    cp "$REPO/hooks/"*.py "$HOME/.claude/hooks/clearmode/"
+    chmod +x "$HOME/.claude/hooks/clearmode/"*.py
     TOUCHED=$((TOUCHED + 1))
-    say "wrote" "$HOME/.claude/hooks/clearmode/check_reply.py"
+    say "wrote" "$HOME/.claude/hooks/clearmode/ (reply + outgoing)"
     if [ "$HOOK" = 1 ]; then
       python3 "$REPO/scripts/register_hook.py" | sed 's/^/  /'
     else

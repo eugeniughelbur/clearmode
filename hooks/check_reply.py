@@ -81,9 +81,16 @@ def last_assistant_text(transcript: Path) -> str:
 
 
 def prose_only(text: str) -> str:
-    text = re.sub(r"```.*?```", "", text, flags=re.S)   # fenced code
-    text = re.sub(r"^\s*[>|].*$", "", text, flags=re.M)  # quotes and table rows
-    text = re.sub(r"`[^`]+`", "X", text)                 # inline code becomes a token
+    """Strip what is not the assistant's own prose.
+
+    Blockquotes are NOT stripped. The user asks for drafts (Slack messages,
+    emails, posts) delivered in blockquotes, so a blockquote is usually the
+    text he is about to send. That is the text that most needs checking.
+    """
+    text = re.sub(r"```.*?```", "", text, flags=re.S)      # fenced code
+    text = re.sub(r"^\s*\|.*$", "", text, flags=re.M)       # table rows
+    text = re.sub(r"^\s*>\s?", "", text, flags=re.M)        # unwrap blockquotes, keep the words
+    text = re.sub(r"`[^`]+`", "X", text)                   # inline code becomes a token
     text = re.sub(r"https?://\S+", "X", text)
     return text.strip()
 

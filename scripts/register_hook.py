@@ -18,19 +18,31 @@ import shutil
 from pathlib import Path
 
 SETTINGS = Path.home() / ".claude" / "settings.json"
-HOOK_DEST = Path.home() / ".claude" / "hooks" / "clearmode" / "check_reply.py"
-MARKER = "clearmode/check_reply.py"
+HOOKS_DIR = Path.home() / ".claude" / "hooks" / "clearmode"
+MARKER = "hooks/clearmode/check_"
+
+# event -> (script, matcher). Stop covers what Claude says in chat. PreToolUse
+# covers what it writes to a file or sends to a person.
+WIRING = {
+    "Stop": ("check_reply.py", ""),
+    "PreToolUse": ("check_outgoing.py", "Write|Edit|Artifact|mcp__.*(Gmail|gmail|Slack|slack|Linear).*"),
+}
 
 
-def entry() -> dict:
+def entry(script: str, matcher: str) -> dict:
     return {
-        "matcher": "",
-        "hooks": [{"type": "command", "command": f"python3 {HOOK_DEST}", "timeout": 25}],
+        "matcher": matcher,
+        "hooks": [{"type": "command", "command": f"python3 {HOOKS_DIR / script}", "timeout": 25}],
     }
 
 
-def has_hook(stop: list) -> bool:
-    return any(MARKER in h.get("command", "") for g in stop for h in g.get("hooks", []))
+def has_hook(groups: list) -> bool:
+    return any(MARKER in h.get("command", "") for g in groups for h in g.get("hooks", []))
+
+
+def strip(groups: list) -> list:
+    return [g for g in groups
+            if not any(MARKER in h.get("command", "") for h in g.get("hooks", []))]
 
 
 def main() -> int:
@@ -44,24 +56,25 @@ def main() -> int:
         return 0
 
     data = json.loads(SETTINGS.read_text()) if SETTINGS.is_file() else {}
-    stop = data.setdefault("hooks", {}).setdefault("Stop", [])
-    present = has_hook(stop)
+    hooks = data.setdefault("hooks", {})
+    changed = []
 
-    if args.remove:
-        if not present:
-            print("hook not registered, nothing to remove")
-            return 0
-        data["hooks"]["Stop"] = [
-            g for g in stop
-            if not any(MARKER in h.get("command", "") for h in g.get("hooks", []))
-        ]
-        action = "removed"
-    else:
-        if present:
-            print(f"already registered in {SETTINGS}")
-            return 0
-        stop.append(entry())
-        action = "registered"
+    for event, (script, matcher) in WIRING.items():
+        groups = hooks.setdefault(event, [])
+        if args.remove:
+            if has_hook(groups):
+                hooks[event] = strip(groups)
+                changed.append(f"removed {event}")
+        elif has_hook(groups):
+            print(f"{event} already registered")
+        else:
+            groups.append(entry(script, matcher))
+            changed.append(f"registered {event}")
+
+    if not changed:
+        print("nothing to change")
+        return 0
+    action = ", ".join(changed)
 
     if args.dry_run:
         print(f"would be {action} in {SETTINGS}")
